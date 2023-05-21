@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Home - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li>
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+
+
+
+
+
+
+
+
+
+    
+
+
+    <section class="readme">
+        <article><h1>CSE 110 SP23 Group 9 Repository</h1>
+<h2>Team Members</h2>
+<ul>
+<li>Designer: Kiyoshi</li>
+<li>Developers: Edwin, Frank, Grace, Leica, Nathaniel, William, Pascal</li>
+<li>Planner: Helena</li>
+<li>Team Leaders: Kiyoshi, Shreya</li>
+</ul>
+<h2>Team Page</h2>
+<p><a href="./admin/team.md">the132Debuggers team page</a></p>
+<h2>Development Guides</h2>
+<h3>Code Style and Formatting</h3>
+<p>The repository has enforced code style and format check, any pull request can only be merged once all checks are passed.</p>
+<p>Run checks locally:</p>
+<pre class="prettyprint source lang-bash"><code># change npm to pnpm/yarn/... accordingly
+npm run lint
+</code></pre>
+<p>Fix format issues:</p>
+<pre class="prettyprint source lang-bash"><code>npm run fix
+</code></pre>
+<p><strong>Note:</strong> there might be issues that cannot be addressed using this command, please read the error log and look up from documentation. <code>ESLint</code> and <code>Prettier</code> are good extensions on VSCode that may help you <strong>a lot</strong>.</p>
+<h3>Pull Requests</h3>
+<p>There is currently no restriction on commit messages, that is being said, your commits on your branch will be squashed to one commit with your PR title as the commit message.</p>
+<p>However, to make sure we have a linear, simple-to-track commit histroy, the repository has employed checks for PR titles.</p>
+<p>PR titles have to follow <a href="https://www.conventionalcommits.org/en/v1.0.0/#summary">this convention</a>.</p>
+<p>Also, <code>main</code> branch is never a place you want to <code>push</code> directly, and it is thereby <em>protected</em>. If you try to push to <code>main</code>, your push will prompt error. Please checkout to your own branch in order to contribute.</p>
+<p>A recommended way of naming your branch is:</p>
+<pre class="prettyprint source"><code>&lt;email-prefix-brief_description>
+</code></pre>
+<p>For example:</p>
+<pre class="prettyprint source"><code>x6guo-updated_readme
+</code></pre>
+<h3>Some Useful <code>git</code> Commands</h3>
+<p>Checkout to a new branch based on current branch:</p>
+<pre class="prettyprint source lang-bash"><code>git checkout -b &lt;new_branch_name>
+</code></pre>
+<p>&quot;Catch up&quot; with main branch (when main branch has something new merged, but it is not yet in your working branch):</p>
+<pre class="prettyprint source lang-bash"><code>git fetch
+git rebase origin/main
+</code></pre>
+<p>If you do not want to create another new commit while some changes needed to be made:</p>
+<pre class="prettyprint source lang-bash"><code>git commit --amend
+</code></pre>
+<p>This command can also include a <code>--no-edit</code> option to ignore the commit message (meaning you have no intent of modifying the commit message).</p>
+<p>If your want to revert some commits:</p>
+<pre class="prettyprint source lang-bash"><code># if you still want your changes
+git reset --soft &lt;target_commit>
+
+# if you do not want your changes
+git reset --hard &lt;target_commit>
+</code></pre>
+<p>There are two recommended ways to specify <code>target_commit</code>:</p>
+<ul>
+<li>Relative
+<ul>
+<li>Definition: relative to current commit, how many commits you want to go back?</li>
+<li>Syntax: <code>HEAD~&lt;number_of_commits&gt;</code></li>
+<li>Example: <code>git reset --hard HEAD~1</code> (I want to go back one commit without preserving changes made in current commit)</li>
+</ul>
+</li>
+<li>Absolute
+<ul>
+<li>Definition: which commit in commit history you want to go?</li>
+<li>Syntax: <code>&lt;some_hash_value&gt;</code>
+Example: <code>git reset --soft 589b7a4</code> (I want go go back to commit with hash value <code>589b7a4</code> with all my changes preserved)</li>
+</ul>
+</li>
+</ul></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Sun May 21 2023 23:03:32 GMT+0000 (Coordinated Universal Time) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
