@@ -2,33 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Home - Documentation</title>
+    <title>JSDoc: Home</title>
 
-    <script src="scripts/prettify/prettify.js"></script>
-    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
+
 <body>
 
-<input type="checkbox" id="nav-trigger" class="nav-trigger" />
-<label for="nav-trigger" class="navicon-button x">
-  <div class="navicon"></div>
-</label>
-
-<label for="nav-trigger" class="overlay"></label>
-
-<nav>
-    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#createPerson">createPerson</a></span></li>
-</nav>
-
 <div id="main">
-    
+
+    <h1 class="page-title">Home</h1>
 
     
 
@@ -37,6 +26,10 @@
     
 
 
+    <h3> </h3>
+
+
+
 
 
 
@@ -47,60 +40,7 @@
     
 
 
-    <section class="readme">
-        <article><h1>CI/CD Pipeline Phase 1</h1>
-<ul>
-<li>[x] linting and code style enforcement (may happen in pipeline and/or in editor)</li>
-<li>[x] code quality via tool  (ex. Codeclimate, Codacy, etc.)</li>
-<li>[x] code quality via human review (ex. Pull Requests)</li>
-<li>[x] unit tests via automation (ex. Jest, Tape, Ava, Cypress, Mocha/Chai, etc.)*</li>
-<li>[x] documentation generation via automation (ex. JSDocs)</li>
-</ul>
-<h2>Currently Functional</h2>
-<h3>- Pull Request Title Style Enforcement</h3>
-<p>We decided to use <code>Commitlint</code> to enforce the Conventional Commit message format (the PR title) for our project's version control system. The decision is documented under <a href="../../specs/adrs/commitlint.md">specs/adrs/commitlint.md</a>.</p>
-<h3>- Linting and Code Style Enforcement</h3>
-<ul>
-<li>
-<p>Locally in editor, run <code>npm run fix</code> before commiting any js code file. This is the same as <code>npm run prettier --write . &amp;&amp; eslint --fix .</code> and will automatically fix the code style of the <code>.js</code> files.</p>
-</li>
-<li>
-<p>When merging PR to the main branch, <code>Common CI</code> workflow in github action will check the code style by using <code>eslint</code>. The PR will be approved only when it passed the <code>check_code_style</code> job in the CI workflow.</p>
-</li>
-</ul>
-<h3>- Code Quality via Human Review (Pull Requests)</h3>
-<p>For any pull request, at least 1 approving review by other team member is required to merge it to the main branch.</p>
-<p>Besides, when creating any pull request, the <a href="../../docs/pull_request_template.md">pull request template</a> automatically appeared on the pull request description should be appropriately filled in. This includes:</p>
-<ul>
-<li>the number of which issue it solved</li>
-<li>renaming branch to have name like <code>&lt;feature/&lt;username&gt;/&lt;3-4 word description separated by dashes&gt;</code></li>
-<li>describe the changes it made</li>
-<li>For dev team, also includes:
-<ul>
-<li>testing of the changes</li>
-<li>screenshot or video of the changes or how to see the changes</li>
-</ul>
-</li>
-</ul>
-<h3>- Unit Tests via Automation</h3>
-<p>We decided to use <code>Jest</code> for our unit tests. The documentation of this decision is under <a href="../../specs/adrs/jest-vs-mocha.md">specs/adrs/jest-vs-mocha.md</a>.</p>
-<p><code>Jest</code> is a delightful JavaScript Testing Framework with a focus on simplicity that we used in our CI/CD pipeline. It will scan the entire project, detect all the <code>**/*.test.js</code> file, and run all the content to perform unit tests.</p>
-<h3>- Documentation generation via automation</h3>
-<p>We are using <code>JSDocs</code> for the documentation of our codes. The CI pipeline uses JSDocs to deploy the documentation of js files to another repository under the132Debuggers organization called <code>documentation</code>, and it will publish <a href="https://the132debuggers.github.io/documentation/index.html">a github page of our documentations</a>.</p>
-<p>This process will run automatically when creating any pull request.</p>
-<h3>- Code Quality via Tool</h3>
-<p>We installed <code>CodeClimate</code> for our code quality check and improve. We are still working on merging it to part of our CI/CD pipeline process.</p>
-<h2>Planned/In Progress</h2>
-<ul>
-<li>code quality via tool
-<ul>
-<li>Installed already, pending further development</li>
-</ul>
-</li>
-</ul>
-<h2>Diagram of Phase 1 Build Pipeline</h2>
-<p><img src="./phase1.drawio.png" alt="Diagram"></p></article>
-    </section>
+
 
 
 
@@ -109,13 +49,17 @@
 
 </div>
 
+<nav>
+    <h2><a href="index.html">Home</a></h2>
+</nav>
+
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Mon May 22 2023 02:35:56 GMT+0000 (Coordinated Universal Time) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon May 22 2023 04:51:18 GMT+0000 (Coordinated Universal Time)
 </footer>
 
-<script>prettyPrint();</script>
-<script src="scripts/linenumber.js"></script>
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
 </body>
 </html>
