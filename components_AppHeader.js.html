@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/AppHeader.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/AppHeader.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { normalize } from '../js/utils.js';
+import { navigateTo } from '../js/navigation.js';
+import { isMuted, toggleMute, switchStop } from '../js/audio.js';
+
+/**
+ * get path to corresponding mute/unmute icon
+ * @returns The path for the mute button
+ */
+function getPath() {
+  return isMuted()
+    ? '&lt;path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-4.72a.75.75 0 011.28.531V19.94a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.506-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.395C2.806 8.757 3.63 8.25 4.51 8.25H6.75z" />'
+    : '&lt;path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />';
+}
+
+class AppHeader extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+
+    const style = new CSSStyleSheet();
+    style.replaceSync(`
+            header {
+                font-size: 1rem;
+                color: #fff;
+                background-color: rgb(30, 41, 59, 0.5);
+                backdrop-filter: blur(2px);
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+                border-bottom: 2px solid #000;
+                word-spacing: 0.125em;
+                padding: 0.5rem;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                height: 60px;
+                padding-top: 6px; 
+                padding-bottom: 6px;
+                padding-left: 6px;
+                padding-right: 6px;
+            }
+
+            #logo {
+                display: flex;
+                flex-direction: row;
+                place-items: center;
+                gap: 0.5rem;
+                flex: none;
+            }
+
+            #settings {
+                flex: 1;
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-end;
+                height: 50px;
+            }
+
+            #effects-wrapper{
+              display: flex;
+              flex-direction: column;
+              place-items: center;
+              position: absolute;
+              bottom: 0.2rem;
+              right: 3.5rem;
+            }
+
+            #music-wrapper{
+              display: flex;
+              flex-direction: column;
+              place-items: center;
+              position: absolute;
+              bottom: 0.2rem;
+              right: 0.05rem;
+            }
+
+            svg {
+                width: 70%;
+            }
+
+            svg:hover {
+                cursor: pointer;
+            }
+
+            h1:hover {
+                cursor: pointer;
+            }
+
+            @media (min-width: 768px) {
+                header {
+                    font-size: 1.25rem;
+                }
+            }
+        `);
+
+    this.shadowRoot.innerHTML = `
+            &lt;header>
+                &lt;h1 id="home-redirect">Wizarding World of Fortune Telling&lt;/h1>
+                &lt;div id="settings">
+                  &lt;div id="effects-wrapper">
+                    &lt;small id="effects-label">effects&lt;/small>
+                    &lt;svg id="mute-control" xmlns="http://www.w3.org/2000/svg" height="30" fill="none" viewBox="-2 5 27 17" stroke-width="1.5" stroke="currentColor">
+                      ${getPath()}
+                    &lt;/svg>
+                  &lt;/div>
+                    
+                  &lt;div id="music-wrapper">
+                    &lt;small id="music-label">music&lt;/small>
+                    &lt;svg id="bgm-control" xmlns="http://www.w3.org/2000/svg" height="30" fill="none" viewBox="-2 5 30 18" stroke-width="1.5" stroke="currentColor">
+                      &lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z" />
+                      &lt;line id="bgm-stroke" x1="1.58" y1="22.53" x2="22.697" y2="1.249"/>
+                    &lt;/svg>
+                  &lt;/div>
+                &lt;/div>
+            &lt;/header>
+        `;
+
+    const muteControl = this.shadowRoot.querySelector('#mute-control');
+
+    muteControl.addEventListener('click', () => {
+      toggleMute();
+      muteControl.innerHTML = getPath();
+    });
+
+    const audio = new Audio('./audio/music_hedwigs_theme.mp3');
+    audio.loop = true;
+
+    const bgmControl = this.shadowRoot.querySelector('#bgm-control');
+    const bgmStroke = this.shadowRoot.querySelector('#bgm-stroke');
+    bgmControl.addEventListener(
+      'click',
+      () => {
+        audio.play();
+        bgmStroke.style.display = 'none';
+        bgmControl.addEventListener('click', () => {
+          audio.muted = !audio.muted;
+          bgmStroke.style.display = audio.muted ? 'block' : 'none';
+        });
+      },
+      { once: true }
+    );
+
+    this.shadowRoot
+      .querySelector('#home-redirect')
+      .addEventListener('click', () => {
+        switchStop('true');
+        navigateTo('home');
+      });
+
+    this.shadowRoot.adoptedStyleSheets = [normalize, style];
+  }
+}
+
+export default AppHeader;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="global.html#event:click-HouseissavedtolocalStorage,clicksoundisplayed,andtheuserisnavigatedtothehousesearchpage">click - House is saved to localStorage, click sound is played,
+               and the user is navigated to the house search page</a></li><li><a href="global.html#event:click-Whentheuserclicksthebackbutton,theappnavigatesbacktothepreviouspageandplayclicksound.">click - When the user clicks the back button, the app navigates
+               back to the previous page and play click sound.</a></li><li><a href="global.html#event:click-Whentheuserclicksthebutton,thehouseisrandomlychosenandtheuserisnavigatedtothehousesearchpage.">click - When the user clicks the button, the house is randomly
+               chosen and the user is navigated to the house search page.</a></li><li><a href="global.html#event:click-Whenuserclicksanywhereonthepage,playclicksoundandnavigatetosort-or-choosepage">click - When user clicks anywhere on the page, play click sound
+               and navigate to sort-or-choose page</a></li><li><a href="global.html#event:click-Navigatestofinishpageandplayclicksound">click - Navigates to finish page and play click sound</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getPath">getPath</a></li><li><a href="global.html#houses">houses</a></li><li><a href="global.html#images">images</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#isMuted">isMuted</a></li><li><a href="global.html#navigateBack">navigateBack</a></li><li><a href="global.html#navigateTo">navigateTo</a></li><li><a href="global.html#randomHouse">randomHouse</a></li><li><a href="global.html#replaceWords">replaceWords</a></li><li><a href="global.html#routes">routes</a></li><li><a href="global.html#setBackground">setBackground</a></li><li><a href="global.html#stopAudio">stopAudio</a></li><li><a href="global.html#switchStop">switchStop</a></li><li><a href="global.html#themeColor">themeColor</a></li><li><a href="global.html#toggleMute">toggleMute</a></li><li><a href="global.html#tones">tones</a></li><li><a href="global.html#translate">translate</a></li><li><a href="global.html#twinkle">twinkle</a></li><li><a href="global.html#wait">wait</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Jun 14 2023 18:47:06 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

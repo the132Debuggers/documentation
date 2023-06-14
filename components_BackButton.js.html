@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: components/BackButton.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,79 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: components/BackButton.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { navigateBack } from '../js/navigation.js';
+import { normalize } from '../js/utils.js';
+import { isMuted, switchStop } from '../js/audio.js';
 
+class BackButton extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
 
-    <h3> </h3>
+    const style = new CSSStyleSheet();
+    style.replaceSync(`
+      :host {
+        position: relative;
+        z-index: 10;
+        width: 0;
+        height: 0;
+      }
 
+      :host(:hover) {
+        cursor: pointer;
+      }
 
+      #wrapper {
+        position: absolute;
+        bottom: 0.5rem;
+        left: 1rem;
+      }
 
+      svg {
+        width: 2.5rem;
+        opacity: 0.8;
+        mix-blend-mode: lighten;
+      }
+    `);
 
+    this.shadowRoot.innerHTML = `
+      &lt;div id="wrapper">
+        &lt;div>Back&lt;/div>
+        &lt;svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          &lt;path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+        &lt;/svg>
+      &lt;/div>
+    `;
 
+    /**
+     * @event click - When the user clicks the back button, the app navigates
+     *                back to the previous page and play click sound.
+     */
+    this.addEventListener('click', () => {
+      const buttonSound = new Audio('./sounds/button-click.mp3');
+      buttonSound.muted = isMuted();
+      buttonSound.play();
+      switchStop('true');
+      navigateBack();
+    });
 
+    this.shadowRoot.adoptedStyleSheets = [normalize, style];
+  }
+}
 
-
-
-
-    
-
-
-
-
-
+export default BackButton;
+</code></pre>
+        </article>
+    </section>
 
 
 

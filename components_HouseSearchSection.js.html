@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/HouseSearchSection.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/HouseSearchSection.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import query from '../js/fortunes.js';
+import { normalize, themeColor } from '../js/utils.js';
+import { isMuted, stopAudio, switchStop } from '../js/audio.js';
+
+/**
+ * Wait for a specified amount of time
+ * @param {*} ms time to wait in milliseconds
+ * @returns A promise that resolves after the specified amount of time
+ */
+function wait(ms) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(), ms);
+  });
+}
+
+class HouseSearchSection extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    const house = localStorage.getItem('house') || 'gryffindor';
+
+    const style = new CSSStyleSheet();
+    style.replaceSync(`
+        :host {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            place-content: center;
+            place-items: center;
+            gap: 2rem;
+        }
+
+        img {
+            width: 20rem;
+        }
+
+        #text-area {
+            width: 100%;
+            display: flex;
+            color: ${themeColor[house][1]};
+            place-content: center;
+            place-items: center;
+        }
+
+        #text-area > div {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            max-width: 36rem;
+            background-color: ${themeColor[house][0]};
+            border: 2px solid ${themeColor[house][1]};
+            font-size: 1.5rem;
+            place-content: center;
+            place-items: center;
+        }
+
+        #question {
+            display: flex;
+            flex-direction: row;
+            gap: 0.25rem;
+        }
+
+        #answer {
+            display: none;
+            flex-direction: column;
+            place-content: center;
+            place-items: center;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            background-color: transparent;
+            border: none;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+        }
+
+        input[type="text"]::placeholder {
+            color: ${themeColor[house][1]};
+            word-spacing: 0.125em;
+        }
+
+        #question > svg{
+            margin-left: 0.2rem;
+            margin-right: -0.2rem;
+        }
+
+        #question > svg{
+            margin-left: 0.2rem;
+            margin-right: -0.2rem;
+        }
+
+        svg {
+            width: 2rem;
+            color: ${themeColor[house][1]};
+        }
+
+        #text-area svg:hover {
+            cursor: pointer;
+        }
+
+        #restart {
+            visibility: hidden;
+            margin-top: -1rem;
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+
+        svg + p {
+            margin-left: 0.3rem;
+        }
+
+        #restart:hover {
+            cursor: pointer;
+        }
+
+        p#fortune {
+            width: 15ch;
+            animation: typing 2s steps(16), blink .6s step-end infinite alternate;
+            white-space: nowrap;
+            overflow: hidden;
+            justify-content: center;
+            border-right: 2px solid ${themeColor[house][1]};
+          }
+
+        @keyframes typing {
+            from{
+                width: 0;
+            }
+        }
+
+        @keyframes blink {
+            50% {
+                border-color: transparent
+            }
+        }
+
+        @media (max-width: 768px) {
+            :host {
+                place-content: flex-start;
+            }
+
+            img {
+                width: 15rem;
+            }
+        }
+    `);
+    this.shadowRoot.adoptedStyleSheets = [normalize, style];
+
+    this.shadowRoot.innerHTML = `
+        &lt;div id="avatar">
+            &lt;img src="./images/${house}/avatar.webp" alt="${house}'s avatar" />
+        &lt;/div>
+        &lt;div id="text-area">
+            &lt;div id="question">
+                &lt;input type="text" placeholder="Ask About the Future and be Enlightened..." autofocus />
+                &lt;svg height="36" viewBox="0 0 20 20" width="36" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                  &lt;path d="m11.5 7c-.276 0-.5-.224-.5-.5 0-1.378-1.122-2.5-2.5-2.5-.276 0-.5-.224-.5-.5s.224-.5.5-.5c1.378 0 2.5-1.122 2.5-2.5 0-.276.224-.5.5-.5s.5.224.5.5c0 1.378 1.122 2.5 2.5 2.5.276 0 .5.224.5.5s-.224.5-.5.5c-1.378 0-2.5 1.122-2.5 2.5 0 .276-.224.5-.5.5zm-1.199-3.5c.49.296.903.708 1.199 1.199.296-.49.708-.903 1.199-1.199-.49-.296-.903-.708-1.199-1.199-.296.49-.708.903-1.199 1.199z"/>&lt;path d="m1.5 10c-.276 0-.5-.224-.5-.5s-.224-.5-.5-.5-.5-.224-.5-.5.224-.5.5-.5.5-.224.5-.5.224-.5.5-.5.5.224.5.5.224.5.5.5.5.224.5.5-.224.5-.5.5-.5.224-.5.5-.224.5-.5.5z"/>&lt;path d="m18.147 15.939-10.586-10.586c-.283-.283-.659-.438-1.061-.438s-.778.156-1.061.438l-.586.586c-.283.283-.438.659-.438 1.061s.156.778.438 1.061l10.586 10.586c.283.283.659.438 1.061.438s.778-.156 1.061-.438l.586-.586c.283-.283.438-.659.438-1.061s-.156-.778-.438-1.061zm-12.586-9.293.586-.586c.094-.094.219-.145.354-.145s.26.052.354.145l1.439 1.439-1.293 1.293-1.439-1.439c-.195-.195-.195-.512 0-.707zm11.878 10.708-.586.586c-.094.094-.219.145-.353.145s-.26-.052-.353-.145l-8.439-8.439 1.293-1.293 8.439 8.439c.195.195.195.512 0 .707z"/>&lt;path d="m3.5 5c-.276 0-.5-.224-.5-.5 0-.827-.673-1.5-1.5-1.5-.276 0-.5-.224-.5-.5s.224-.5.5-.5c.827 0 1.5-.673 1.5-1.5 0-.276.224-.5.5-.5s.5.224.5.5c0 .827.673 1.5 1.5 1.5.276 0 .5.224.5.5s-.224.5-.5.5c-.827 0-1.5.673-1.5 1.5 0 .276-.224.5-.5.5zm-.502-2.5c.19.143.359.312.502.502.143-.19.312-.359.502-.502-.19-.143-.359-.312-.502-.502-.143.19-.312.359-.502.502z"/>&lt;path d="m3.5 15c-.276 0-.5-.224-.5-.5 0-.827-.673-1.5-1.5-1.5-.276 0-.5-.224-.5-.5s.224-.5.5-.5c.827 0 1.5-.673 1.5-1.5 0-.276.224-.5.5-.5s.5.224.5.5c0 .827.673 1.5 1.5 1.5.276 0 .5.224.5.5s-.224.5-.5.5c-.827 0-1.5.673-1.5 1.5 0 .276-.224.5-.5.5zm-.502-2.5c.19.143.359.312.502.502.143-.19.312-.359.502-.502-.19-.143-.359-.312-.502-.502-.143.19-.312.359-.502.502z"/>
+                &lt;/svg>
+            &lt;/div>
+            &lt;div id="answer">
+                &lt;p id="fortune">Casting spells...&lt;/p >
+            &lt;/div>
+        &lt;/div>
+        &lt;div id="restart">
+            &lt;svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                &lt;path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            &lt;/svg>
+            &lt;p id='text-area'>Cast A New Spell&lt;/p >
+        &lt;/div>
+    `;
+    // select elements from the shadow root
+    const question = this.shadowRoot.querySelector('#question');
+    const input = question.querySelector('input');
+    const questionButton = question.querySelector('svg');
+    const answer = this.shadowRoot.querySelector('#answer');
+    const restartButton = this.shadowRoot.querySelector('#restart');
+    const fortune = answer.querySelector('#fortune');
+    const audio = new Audio(`./sounds/spells-${house}.mp3`);
+    const synth = window.speechSynthesis;
+
+    /**
+     * generate answer from user's question, and display it properly
+     */
+    const handleInput = async () => {
+      let broken = false;
+      const text = input.value.trim();
+      if (!text) {
+        return;
+      }
+      input.value = '';
+      question.style.display = 'none';
+      answer.style.display = 'flex';
+      audio.muted = isMuted();
+      audio.play();
+
+      let result = await query(text, house);
+      const lastPeriodIndex = result.lastIndexOf('.');
+      if (lastPeriodIndex !== -1) {
+        result = result.substring(0, lastPeriodIndex + 1);
+      }
+      await wait(1500);
+
+      fortune.id = 'response';
+      fortune.textContent = '';
+      answer.style.placeItems = 'start';
+
+      let index = 0;
+      /**
+       * result's text animation and speech synthesizer audio read it out
+       */
+      async function printNextCharacter() {
+        switchStop('false');
+        const utterance = new SpeechSynthesisUtterance(result);
+        utterance.volume = isMuted() ? 0 : 1;
+        utterance.rate = 0.85;
+        synth.speak(utterance);
+        if (stopAudio() === true) {
+          synth.cancel();
+          broken = true;
+          return;
+        }
+
+        while (index &lt; result.length) {
+          fortune.textContent += result.charAt(index);
+          index++;
+          if (stopAudio() === true) {
+            synth.cancel();
+            broken = true;
+            return;
+          }
+          // eslint-disable-next-line no-await-in-loop
+          await wait(50);
+        }
+      }
+      if (broken) {
+        return;
+      }
+      await printNextCharacter();
+      restartButton.style.visibility = 'visible';
+    };
+
+    questionButton.addEventListener('click', handleInput);
+
+    /**
+     * handle enter key press
+     */
+    input.addEventListener('keydown', async (event) => {
+      if (event.key === 'Enter') {
+        await handleInput();
+      }
+    });
+
+    /**
+     * handle restart button click - reset the page to its initial state
+     */
+    restartButton.addEventListener('click', () => {
+      answer.style.display = 'none';
+      answer.style.placeItems = 'center';
+      question.style.display = 'flex';
+      restartButton.style.visibility = 'hidden';
+      fortune.textContent = 'Casting Spells...';
+      fortune.id = 'fortune';
+      this.connectedCallback();
+    });
+    this.connectedCallback();
+  }
+
+  /**
+   * focus on input
+   */
+  connectedCallback() {
+    setTimeout(() => {
+      const input = this.shadowRoot.querySelector('input');
+      input.focus();
+    }, 0);
+  }
+}
+
+export default HouseSearchSection;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="global.html#event:click-HouseissavedtolocalStorage,clicksoundisplayed,andtheuserisnavigatedtothehousesearchpage">click - House is saved to localStorage, click sound is played,
+               and the user is navigated to the house search page</a></li><li><a href="global.html#event:click-Whentheuserclicksthebackbutton,theappnavigatesbacktothepreviouspageandplayclicksound.">click - When the user clicks the back button, the app navigates
+               back to the previous page and play click sound.</a></li><li><a href="global.html#event:click-Whentheuserclicksthebutton,thehouseisrandomlychosenandtheuserisnavigatedtothehousesearchpage.">click - When the user clicks the button, the house is randomly
+               chosen and the user is navigated to the house search page.</a></li><li><a href="global.html#event:click-Whenuserclicksanywhereonthepage,playclicksoundandnavigatetosort-or-choosepage">click - When user clicks anywhere on the page, play click sound
+               and navigate to sort-or-choose page</a></li><li><a href="global.html#event:click-Navigatestofinishpageandplayclicksound">click - Navigates to finish page and play click sound</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getPath">getPath</a></li><li><a href="global.html#houses">houses</a></li><li><a href="global.html#images">images</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#isMuted">isMuted</a></li><li><a href="global.html#navigateBack">navigateBack</a></li><li><a href="global.html#navigateTo">navigateTo</a></li><li><a href="global.html#randomHouse">randomHouse</a></li><li><a href="global.html#replaceWords">replaceWords</a></li><li><a href="global.html#routes">routes</a></li><li><a href="global.html#setBackground">setBackground</a></li><li><a href="global.html#stopAudio">stopAudio</a></li><li><a href="global.html#switchStop">switchStop</a></li><li><a href="global.html#themeColor">themeColor</a></li><li><a href="global.html#toggleMute">toggleMute</a></li><li><a href="global.html#tones">tones</a></li><li><a href="global.html#translate">translate</a></li><li><a href="global.html#twinkle">twinkle</a></li><li><a href="global.html#wait">wait</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Jun 14 2023 18:47:06 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

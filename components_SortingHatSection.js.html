@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/SortingHatSection.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/SortingHatSection.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { normalize, themeColor, randomHouse } from '../js/utils.js';
+import { navigateTo } from '../js/navigation.js';
+import { isMuted } from '../js/audio.js';
+
+class SortingHatSection extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+
+    const style = new CSSStyleSheet();
+    style.replaceSync(`
+      :host {
+        height: 100%;
+        display: flex;
+      }
+
+      .wrapper {
+        display: flex;
+        flex-direction: column;
+        place-items: center;
+        place-content: center;
+        width: 100%;
+      }
+
+      #button {
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        place-items: center;
+        place-content: center;
+        cursor: pointer;
+      }
+
+      #button:hover {
+        background-color: rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0 0.5rem 0.25rem rgba(0, 0, 0, 0.3);
+      }
+
+      #button img {
+        width: 24rem;
+      }
+
+      #notification {
+        display: none;
+        font-size: 2rem;
+      }
+
+      #tip {
+        font-size: 2.25rem;
+        padding: 0.5rem 1.5rem;
+        background-color: rgba(0, 0, 0, 0.6);
+        border-radius: 0.5rem;
+        text-align: center;
+      }
+
+      @media (max-width: 768px) {
+        #button img {
+          width: 18rem;
+        }
+
+        #button h1 {
+          font-size: 1.5rem;
+        }
+      }
+    `);
+
+    this.shadowRoot.adoptedStyleSheets = [normalize, style];
+
+    this.shadowRoot.innerHTML = ` 
+        &lt;div class="wrapper">
+          &lt;div id="button"> 
+            &lt;img src="./images/sorting-hat.webp" alt="Image of the sorting hat"/>
+            &lt;h1 id="notification">You have been sorted into...&lt;/h1>
+            &lt;h1 id="tip">Click Me To Be Sorted&lt;/h1>
+          &lt;/div>
+         &lt;div>
+    `;
+
+    /**
+     * @event click - When the user clicks the button, the house is randomly
+     *                chosen and the user is navigated to the house search page.
+     */
+    this.shadowRoot.querySelector('#button').addEventListener(
+      'click',
+      () => {
+        // click sound of the button
+        const buttonSound = new Audio('./sounds/button-click.mp3');
+        buttonSound.muted = isMuted();
+        buttonSound.play();
+
+        // randomly choosing a house
+        const house = randomHouse();
+        localStorage.setItem('house', house);
+
+        // sorting hat's audio for corresponding house
+        const audio = new Audio(`./sounds/${house}_sort.m4a`);
+        audio.muted = isMuted();
+        audio.play();
+
+        // set the notification and tip to corresponding house
+        const tip = this.shadowRoot.querySelector('#tip');
+        tip.textContent = house;
+        const notification = this.shadowRoot.querySelector('#notification');
+        notification.style = `
+          display: block;
+        `;
+        tip.style = `
+          display: none;
+        `;
+
+        // set the time for display result and navigation to house search page
+        setTimeout(() => {
+          tip.style = `
+            display: block;
+            border: 2px solid ${themeColor[house][1]};
+            -webkit-text-stroke: 1px ${themeColor[house][1]};
+            color: ${themeColor[house][1]};
+            background-color: ${themeColor[house][0]};
+          `;
+          tip.textContent = house;
+
+          // wait and navigate to house search page
+          setTimeout(() => {
+            navigateTo('house-search');
+          }, 1000);
+        }, 3150);
+      },
+      { once: true }
+    );
+  }
+}
+
+export default SortingHatSection;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="global.html#event:click-HouseissavedtolocalStorage,clicksoundisplayed,andtheuserisnavigatedtothehousesearchpage">click - House is saved to localStorage, click sound is played,
+               and the user is navigated to the house search page</a></li><li><a href="global.html#event:click-Whentheuserclicksthebackbutton,theappnavigatesbacktothepreviouspageandplayclicksound.">click - When the user clicks the back button, the app navigates
+               back to the previous page and play click sound.</a></li><li><a href="global.html#event:click-Whentheuserclicksthebutton,thehouseisrandomlychosenandtheuserisnavigatedtothehousesearchpage.">click - When the user clicks the button, the house is randomly
+               chosen and the user is navigated to the house search page.</a></li><li><a href="global.html#event:click-Whenuserclicksanywhereonthepage,playclicksoundandnavigatetosort-or-choosepage">click - When user clicks anywhere on the page, play click sound
+               and navigate to sort-or-choose page</a></li><li><a href="global.html#event:click-Navigatestofinishpageandplayclicksound">click - Navigates to finish page and play click sound</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getPath">getPath</a></li><li><a href="global.html#houses">houses</a></li><li><a href="global.html#images">images</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#isMuted">isMuted</a></li><li><a href="global.html#navigateBack">navigateBack</a></li><li><a href="global.html#navigateTo">navigateTo</a></li><li><a href="global.html#randomHouse">randomHouse</a></li><li><a href="global.html#replaceWords">replaceWords</a></li><li><a href="global.html#routes">routes</a></li><li><a href="global.html#setBackground">setBackground</a></li><li><a href="global.html#stopAudio">stopAudio</a></li><li><a href="global.html#switchStop">switchStop</a></li><li><a href="global.html#themeColor">themeColor</a></li><li><a href="global.html#toggleMute">toggleMute</a></li><li><a href="global.html#tones">tones</a></li><li><a href="global.html#translate">translate</a></li><li><a href="global.html#twinkle">twinkle</a></li><li><a href="global.html#wait">wait</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Jun 14 2023 18:47:06 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

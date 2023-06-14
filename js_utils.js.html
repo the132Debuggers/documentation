@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utils.js</title>
+    <title>JSDoc: Source: js/utils.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utils.js</h1>
+    <h1 class="page-title">Source: js/utils.js</h1>
 
     
 
@@ -27,6 +27,10 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>export const normalize = new CSSStyleSheet();
+
+/**
+ * Normalize CSS
+ */
 normalize.replaceSync(`
 *,::before,::after {box-sizing: border-box;border-width: 0;border-style: solid;border-color: theme('borderColor.DEFAULT', currentColor);}::before,::after {--tw-content: '';}html {line-height: 1.5;-webkit-text-size-adjust: 100%;-moz-tab-size: 4;tab-size: 4;font-family: theme('fontFamily.sans',ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji');font-feature-settings: theme('fontFamily.sans[1].fontFeatureSettings',normal);font-variation-settings: theme('fontFamily.sans[1].fontVariationSettings',normal);}body {margin: 0;line-height: inherit;}hr {height: 0;color: inherit;border-top-width: 1px;}abbr:where([title]) {text-decoration: underline dotted;}h1,h2,h3,h4,h5,h6 {font-size: inherit;font-weight: inherit;}a {color: inherit;text-decoration: inherit;}b,strong {font-weight: bolder;}code,kbd,samp,pre {font-family: theme('fontFamily.mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace);font-size: 1em;}small {font-size: 80%;}sub,sup {font-size: 75%;line-height: 0;position: relative;vertical-align: baseline;}sub {bottom: -0.25em;}sup {top: -0.5em;}table {text-indent: 0;border-color: inherit;border-collapse: collapse;}button,input,optgroup,select,textarea {font-family: inherit;font-size: 100%;font-weight: inherit;line-height: inherit;color: inherit;margin: 0;padding: 0;}button,select {text-transform: none;}button,[type='button'],[type='reset'],[type='submit'] {-webkit-appearance: button;background-color: transparent;background-image: none;}:-moz-focusring {outline: auto;}:-moz-ui-invalid {box-shadow: none;}progress {vertical-align: baseline;}::-webkit-inner-spin-button,::-webkit-outer-spin-button {height: auto;}[type='search'] {-webkit-appearance: textfield;outline-offset: -2px;}::-webkit-search-decoration {-webkit-appearance: none;}::-webkit-file-upload-button {-webkit-appearance: button;font: inherit;}summary {display: list-item;}blockquote,dl,dd,h1,h2,h3,h4,h5,h6,hr,figure,p,pre {margin: 0;}fieldset {margin: 0;padding: 0;}legend {padding: 0;}ol,ul,menu {list-style: none;margin: 0;padding: 0;}textarea {resize: vertical;}input::placeholder,textarea::placeholder {opacity: 1;color: theme('colors.gray.400', #9ca3af);}button,[role='button'] {cursor: pointer;}:disabled {cursor: default;}img,svg,video,canvas,audio,iframe,embed,object {display: block;vertical-align: middle;}img,video {max-width: 100%;height: auto;}[hidden] {display: none;}
 `);
@@ -89,6 +93,9 @@ export function twinkle(injectedElement) {
   }
 }
 
+/**
+ * theme colors for each house
+ */
 export const themeColor = {
   gryffindor: ['#b91c23', '#f2b200'],
   hufflepuff: ['#f8be12', '#040005'],
@@ -96,6 +103,9 @@ export const themeColor = {
   slytherin: ['#00865d', '#b9b3c0'],
 };
 
+/**
+ * array of house names
+ */
 export const houses = ['gryffindor', 'hufflepuff', 'ravenclaw', 'slytherin'];
 
 /**
@@ -106,6 +116,9 @@ export function randomHouse() {
   return houses[Math.floor(Math.random() * houses.length)];
 }
 
+/**
+ * keywords of house tones
+ */
 export const tones = {
   gryffindor: 'bravery, helping and chivalry',
   hufflepuff: 'hard work, patience, justice, and loyalty',
@@ -122,13 +135,17 @@ export const tones = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#navigateBack">navigateBack</a></li><li><a href="global.html#navigateTo">navigateTo</a></li><li><a href="global.html#randomHouse">randomHouse</a></li><li><a href="global.html#replaceWords">replaceWords</a></li><li><a href="global.html#setBackground">setBackground</a></li><li><a href="global.html#translate">translate</a></li><li><a href="global.html#twinkle">twinkle</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Events</h3><ul><li><a href="global.html#event:click-HouseissavedtolocalStorage,clicksoundisplayed,andtheuserisnavigatedtothehousesearchpage">click - House is saved to localStorage, click sound is played,
+               and the user is navigated to the house search page</a></li><li><a href="global.html#event:click-Whentheuserclicksthebackbutton,theappnavigatesbacktothepreviouspageandplayclicksound.">click - When the user clicks the back button, the app navigates
+               back to the previous page and play click sound.</a></li><li><a href="global.html#event:click-Whentheuserclicksthebutton,thehouseisrandomlychosenandtheuserisnavigatedtothehousesearchpage.">click - When the user clicks the button, the house is randomly
+               chosen and the user is navigated to the house search page.</a></li><li><a href="global.html#event:click-Whenuserclicksanywhereonthepage,playclicksoundandnavigatetosort-or-choosepage">click - When user clicks anywhere on the page, play click sound
+               and navigate to sort-or-choose page</a></li><li><a href="global.html#event:click-Navigatestofinishpageandplayclicksound">click - Navigates to finish page and play click sound</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getPath">getPath</a></li><li><a href="global.html#houses">houses</a></li><li><a href="global.html#images">images</a></li><li><a href="global.html#initialize">initialize</a></li><li><a href="global.html#isMuted">isMuted</a></li><li><a href="global.html#navigateBack">navigateBack</a></li><li><a href="global.html#navigateTo">navigateTo</a></li><li><a href="global.html#randomHouse">randomHouse</a></li><li><a href="global.html#replaceWords">replaceWords</a></li><li><a href="global.html#routes">routes</a></li><li><a href="global.html#setBackground">setBackground</a></li><li><a href="global.html#stopAudio">stopAudio</a></li><li><a href="global.html#switchStop">switchStop</a></li><li><a href="global.html#themeColor">themeColor</a></li><li><a href="global.html#toggleMute">toggleMute</a></li><li><a href="global.html#tones">tones</a></li><li><a href="global.html#translate">translate</a></li><li><a href="global.html#twinkle">twinkle</a></li><li><a href="global.html#wait">wait</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Jun 12 2023 05:13:44 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Jun 14 2023 18:47:06 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
